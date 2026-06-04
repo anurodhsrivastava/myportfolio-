@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Folio" />
+<meta name="theme-color" content="#0a0a0b" />
+<title>Folio</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:#0a0a0b}
+  body{font-family:'IBM Plex Sans',system-ui,sans-serif;color:#e5e5e5}
+  input,select,button{font-family:inherit}
+  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+  .serif{font-family:'Fraunces',Georgia,serif}
+  .wrap{max-width:460px;margin:0 auto;padding:18px 16px 70px}
+  .hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
+  .title{font-size:26px;font-style:italic;font-weight:500;color:#fafafa;line-height:1}
+  .sub{font-size:11px;color:#737373;margin-top:5px;letter-spacing:.04em}
+  .row{display:flex;align-items:center}
+  .gap8{gap:8px}
+  .btn{display:flex;align-items:center;gap:4px;background:#16161a;border:1px solid #232327;border-radius:10px;padding:7px 11px;color:#e5e5e5;font-size:12.5px;cursor:pointer}
+  .ibtn{display:flex;align-items:center;justify-content:center;width:34px;height:33px;background:#16161a;border:1px solid #232327;border-radius:10px;color:#e5e5e5;cursor:pointer}
+  .ibtnsm{background:#1a1a1d;border:1px solid #232327;border-radius:8px;width:30px;height:28px;display:flex;align-items:center;justify-content:center;color:#a3a3a3;cursor:pointer}
+  .hero{border-radius:22px;padding:22px 20px;background:linear-gradient(160deg,#16161a,#0e0e10);border:1px solid #232327;margin-bottom:14px}
+  .lab{font-size:11.5px;letter-spacing:.12em;color:#737373;margin-bottom:8px}
+  .net{font-size:44px;font-weight:500;color:#fafafa;line-height:1;font-variant-numeric:tabular-nums}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;padding:5px 10px;border-radius:9px}
+  .statsrow{display:flex;margin-top:18px;border-top:1px solid #232327;padding-top:14px}
+  .stat{flex:1;border-right:1px solid #232327;padding-right:8px}
+  .stat:last-child{border-right:none}
+  .stat .k{font-size:10px;color:#737373;margin-bottom:4px;letter-spacing:.03em}
+  .stat .v{font-size:12.5px;color:#d4d4d4}
+  .fxrow{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#111113;border:1px solid #1f1f23;border-radius:12px;margin-bottom:10px;font-size:12.5px}
+  .refresh{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;background:linear-gradient(160deg,#1c3a30,#16302a);border:1px solid #2a4a3e;color:#6ee7b7;font-size:13.5px;font-weight:500;cursor:pointer;margin-bottom:22px}
+  .refresh[disabled]{background:#16161a;color:#737373;cursor:default}
+  .status{padding:9px 12px;background:#111113;border:1px solid #1f1f23;border-radius:10px;margin:-12px 0 22px;font-size:11.5px;color:#a3a3a3;line-height:1.45}
+  .sechead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .sectitle{font-size:13px;letter-spacing:.05em;color:#a3a3a3;font-weight:500}
+  .count{font-size:11px;color:#525252;border:1px solid #232327;border-radius:20px;padding:0 7px}
+  .add{display:flex;align-items:center;gap:4px;background:none;border:none;color:#34d399;font-size:12.5px;cursor:pointer;font-weight:500}
+  .bhdr{display:flex;justify-content:space-between;align-items:center;padding:0 2px 10px;margin-bottom:6px;border-bottom:1px solid #232327}
+  .bname{font-size:13.5px;color:#fafafa;font-weight:600}
+  .ahdr{display:flex;justify-content:space-between;align-items:center;padding:0 4px 9px}
+  .aname{font-size:11.5px;letter-spacing:.05em;color:#8a8a8a;font-weight:500}
+  .hcard{border-radius:16px;border:1px solid #1f1f23;background:#111113;overflow:hidden;margin-bottom:10px}
+  .hc1{padding:13px 15px 11px;display:flex;justify-content:space-between}
+  .reg{font-size:11px;color:#737373;border:1px solid #2a2a2e;border-radius:5px;padding:1px 5px}
+  .tkr{font-weight:600;font-size:15.5px;color:#fafafa}
+  .nm{font-size:11.5px;color:#737373;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+  .hc2{padding:11px 15px;border-top:1px solid #1a1a1d;display:flex;justify-content:space-between;align-items:flex-end}
+  .hc3{padding:8px 15px 10px;border-top:1px solid #1a1a1d;display:flex;justify-content:space-between;align-items:center}
+  .bar{height:4px;background:#1f1f23;border-radius:3px;flex:1;max-width:110px;overflow:hidden}
+  .barf{height:100%;background:#4b5563}
+  .livebtn{font-size:9.5px;letter-spacing:.06em;padding:3px 7px;border-radius:6px;cursor:pointer;border:1px solid}
+  .empty{padding:20px 16px;text-align:center;color:#737373;font-size:12.5px;border:1px dashed #232327;border-radius:14px}
+  .ccard{background:#111113;border:1px solid #1f1f23;border-radius:14px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .foot{text-align:center;margin-top:30px;font-size:10.5px;color:#3f3f46;line-height:1.6}
+  .up{color:#34d399}.down{color:#fb7185}.dim{color:#737373}
+  .mbg{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+  .sheet{width:100%;max-width:460px;background:#141416;border-top:1px solid #2a2a2e;border-radius:22px 22px 0 0;padding:20px 18px calc(28px + env(safe-area-inset-bottom));max-height:92vh;overflow-y:auto}
+  .shead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .stitle{font-size:17px;font-weight:600;color:#fafafa}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .full{grid-column:1 / 3}
+  .field .k{font-size:10.5px;color:#737373;margin-bottom:5px;letter-spacing:.03em}
+  .inp{width:100%;background:#0a0a0b;border:1px solid #2a2a2e;border-radius:9px;color:#fafafa;padding:10px 11px;font-size:14px}
+  .inp:focus{outline:none;border-color:#34d399}
+  .note{font-size:11.5px;color:#737373;line-height:1.5}
+  .saverow{display:flex;gap:10px;margin-top:20px}
+  .cancel{flex:1;padding:12px;border-radius:11px;background:#1f1f23;border:none;color:#a3a3a3;font-size:14px;cursor:pointer}
+  .save{flex:2;padding:12px;border-radius:11px;background:#34d399;border:none;color:#06281d;font-size:14px;font-weight:600;cursor:pointer}
+  .chk{display:flex;align-items:center;gap:9px;cursor:pointer;align-self:end;padding-bottom:8px}
+  .chk input{width:17px;height:17px;accent-color:#34d399}
+  svg{display:block}
+  .spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="modal"></div>
+<script>
+"use strict";
+
+/* ---------- constants & seed ---------- */
+var STORE_KEY = "folio:v2";
+var BROKERS = ["TD", "Questrade"];
+var ACCOUNTS = ["CAD Cash","USD Cash","CAD TFSA","USD TFSA","CAD SDRSP","USD SDRSP","CAD Margin","USD Margin","Margin"];
+var FINNHUB_DEFAULT = "https://finnhub.io/api/v1";
+var FX_URL = "https://api.frankfurter.app/latest?from=USD&to=CAD";
+function uid(){ return Math.random().toString(36).slice(2,9); }
+
+var SEED = {
+  fx: 1.388, base: "CAD", snapshot: "Jun 3 close",
+  settings: { apiKey: "", interval: 30, endpoint: FINNHUB_DEFAULT },
+  cash: [],
+  holdings: [
+    { id:"h1",  ticker:"BMBL", name:"Bumble Inc Cl-A",           region:"US", broker:"TD", account:"CAD Margin", live:true,  qty:100,     cur:"CAD", mv:420.56,   cost:6436.90,  px:3.03,   pxCur:"USD", day:-0.33 },
+    { id:"h2",  ticker:"LITX", name:"Tradr 2X Long LITE ETF",    region:"US", broker:"TD", account:"CAD SDRSP",  live:true,  qty:500,     cur:"CAD", mv:34353.00, cost:30990.07, px:49.50,  pxCur:"USD", day:18.31 },
+    { id:"h3",  ticker:"AMDL", name:"GraniteShs 2x Lng AMD ETF", region:"US", broker:"TD", account:"USD TFSA",   live:true,  qty:56,      cur:"USD", mv:3983.28,  cost:3873.99,  px:71.13,  pxCur:"USD", day:4.30 },
+    { id:"h4",  ticker:"AMC",  name:"AMC Entertain Hldgs-A New", region:"US", broker:"TD", account:"USD TFSA",   live:true,  qty:256,     cur:"USD", mv:488.96,   cost:14949.69, px:1.91,   pxCur:"USD", day:-6.84 },
+    { id:"h5",  ticker:"SOS",  name:"SOS Ltd Cl-A",              region:"US", broker:"TD", account:"USD TFSA",   live:true,  qty:1,       cur:"USD", mv:1.07,     cost:2921.02,  px:1.07,   pxCur:"USD", day:0 },
+    { id:"h6",  ticker:"SOXL", name:"Drx Dly Semi Bull 3x ETF",  region:"US", broker:"TD", account:"CAD TFSA",   live:true,  qty:85,      cur:"CAD", mv:33098.31, cost:29047.24, px:280.54, pxCur:"USD", day:5.34 },
+    { id:"h7",  ticker:"LFE",  name:"CDN Life Co Split Corp-A",  region:"CA", broker:"TD", account:"CAD TFSA",   live:false, qty:600,     cur:"CAD", mv:4704.00,  cost:4736.99,  px:7.84,   pxCur:"CAD", day:0.79 },
+    { id:"h8",  ticker:"MAPT", name:"Maptelligent Inc",          region:"US", broker:"TD", account:"USD Cash",   live:false, qty:13000,   cur:"USD", mv:2.60,     cost:843.47,   px:0.0002, pxCur:"USD", day:0 },
+    { id:"h9",  ticker:"MCOA", name:"Marijuana Co Of Amer Inc",  region:"US", broker:"TD", account:"USD Cash",   live:false, qty:2000000, cur:"USD", mv:0,        cost:1564.97,  px:0.00,   pxCur:"USD", day:0 },
+    { id:"h10", ticker:"MAPT", name:"Maptelligent Inc",          region:"US", broker:"TD", account:"CAD Cash",   live:false, qty:330000,  cur:"CAD", mv:91.61,    cost:1158.30,  px:0.0002, pxCur:"USD", day:0 },
+    { id:"h11", ticker:"LOGC", name:"ContextLogic Holdings Inc", region:"US", broker:"TD", account:"CAD Cash",   live:false, qty:35,      cur:"CAD", mv:437.22,   cost:366.37,   px:9.00,   pxCur:"USD", day:-0.55 },
+    { id:"h12", ticker:"BMBL", name:"Bumble Inc Cl-A",           region:"US", broker:"TD", account:"CAD Cash",   live:true,  qty:81,      cur:"CAD", mv:340.65,   cost:5213.88,  px:3.03,   pxCur:"USD", day:-0.33 },
+    { id:"h13", ticker:"CAPR", name:"Capricor Therapeutics-New", region:"US", broker:"TD", account:"CAD Cash",   live:true,  qty:4,       cur:"CAD", mv:166.34,   cost:173.17,   px:29.96,  pxCur:"USD", day:2.90 },
+    { id:"h14", ticker:"AMZN", name:"Amazon.com Inc",            region:"US", broker:"Questrade", account:"Margin", live:true,  qty:6,    cur:"USD", mv:1500.12,  cost:578.08,   px:250.02, pxCur:"USD", day:-2.53 },
+    { id:"h15", ticker:"MAPT", name:"Maptelligent Inc",          region:"US", broker:"Questrade", account:"Margin", live:false, qty:14000, cur:"USD", mv:0,       cost:788.39,   px:0.0002, pxCur:"USD", day:0 }
+  ]
+};
+
+/* ---------- state ---------- */
+var state = JSON.parse(JSON.stringify(SEED));
+var statusMsg = null;
+var busy = false;
+var pollId = null;
+
+function load(){
+  try {
+    var raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      var d = JSON.parse(raw);
+      if (d.holdings) state.holdings = d.holdings;
+      if (d.cash) state.cash = d.cash;
+      if (typeof d.fx === "number") state.fx = d.fx;
+      if (d.base) state.base = d.base;
+      if (d.snapshot) state.snapshot = d.snapshot;
+      if (d.settings) {
+        state.settings = {
+          apiKey: d.settings.apiKey || SEED.settings.apiKey,
+          interval: typeof d.settings.interval === "number" ? d.settings.interval : SEED.settings.interval,
+          endpoint: d.settings.endpoint || SEED.settings.endpoint
+        };
+      }
+    }
+  } catch (e) {}
+}
+function save(){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify({ holdings: state.holdings, cash: state.cash, fx: state.fx, base: state.base, snapshot: state.snapshot, settings: state.settings })); } catch (e) {}
+}
+
+/* ---------- helpers ---------- */
+function convert(amount, from, to, fx){
+  if (from === to) return amount;
+  if (from === "USD" && to === "CAD") return amount * fx;
+  if (from === "CAD" && to === "USD") return amount / fx;
+  return amount;
+}
+function num(n, d){ if (d === undefined) d = 2; return Number(n).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+function fmt(n, cur){ cur = cur || state.base; return (cur === "USD" ? "US$ " : "C$ ") + num(n); }
+function pxFmt(n){ return Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: Math.abs(n) < 1 ? 4 : 2 }); }
+function strip(n){ return num(Math.abs(n)); }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function sign(n){ return n >= 0 ? "+" : "−"; }
+
+function totals(){
+  var invested = 0, cost = 0, i;
+  for (i = 0; i < state.holdings.length; i++){ var h = state.holdings[i]; invested += convert(h.mv, h.cur, state.base, state.fx); cost += convert(h.cost, h.cur, state.base, state.fx); }
+  var cashTotal = 0;
+  for (i = 0; i < state.cash.length; i++){ cashTotal += convert(state.cash[i].amount, state.cash[i].cur, state.base, state.fx); }
+  var pl = invested - cost;
+  return { invested: invested, cost: cost, cashTotal: cashTotal, pl: pl, plPct: cost > 0 ? (pl / cost) * 100 : 0, net: invested + cashTotal };
+}
+function sumOf(items){ var mv = 0, cost = 0, i; for (i = 0; i < items.length; i++){ mv += convert(items[i].mv, items[i].cur, state.base, state.fx); cost += convert(items[i].cost, items[i].cur, state.base, state.fx); } return { mv: mv, pl: mv - cost }; }
+
+function grouped(){
+  var sorted = state.holdings.slice().sort(function(a,b){ return convert(b.mv,b.cur,state.base,state.fx) - convert(a.mv,a.cur,state.base,state.fx); });
+  var byB = {};
+  sorted.forEach(function(h){ var b = h.broker || "Unassigned", a = h.account || "Unassigned"; if(!byB[b]) byB[b] = {}; if(!byB[b][a]) byB[b][a] = []; byB[b][a].push(h); });
+  function rank(name, mv){ return name === "Unassigned" ? -Infinity : mv; }
+  var brokers = Object.keys(byB).map(function(bn){
+    var accts = Object.keys(byB[bn]).map(function(an){ var items = byB[bn][an]; var s = sumOf(items); return { name: an, items: items, mv: s.mv, pl: s.pl }; });
+    accts.sort(function(x,y){ return rank(y.name,y.mv) - rank(x.name,x.mv); });
+    var all = []; accts.forEach(function(a){ all = all.concat(a.items); });
+    var s2 = sumOf(all);
+    return { name: bn, accounts: accts, mv: s2.mv, pl: s2.pl };
+  });
+  brokers.sort(function(x,y){ return rank(y.name,y.mv) - rank(x.name,x.mv); });
+  return brokers;
+}
+
+/* ---------- render ---------- */
+function plClass(n){ return n >= 0 ? "up" : "down"; }
+
+function holdingCardHTML(h, invested){
+  var mvBase = convert(h.mv, h.cur, state.base, state.fx);
+  var pl = h.mv - h.cost, plPct = h.cost > 0 ? (pl / h.cost) * 100 : 0;
+  var alloc = invested > 0 ? (mvBase / invested) * 100 : 0;
+  var avg = h.qty ? h.cost / h.qty : 0;
+  var pcur = h.pxCur === "USD" ? "US$" : "C$";
+  var mcur = h.cur === "USD" ? "US$" : "C$";
+  var liveStyle = h.live ? "border-color:rgba(52,211,153,.4);color:#34d399;background:rgba(52,211,153,.08)" : "border-color:#2a2a2e;color:#737373;background:transparent";
+  return ''
+    + '<div class="hcard">'
+    +   '<div class="hc1">'
+    +     '<div style="min-width:0">'
+    +       '<div class="row" style="gap:7px"><span class="reg mono">' + esc(h.region) + '</span><span class="tkr mono">' + esc(h.ticker) + '</span></div>'
+    +       '<div class="nm">' + esc(h.name) + '</div>'
+    +     '</div>'
+    +     '<div style="text-align:right">'
+    +       '<div class="mono" style="font-size:14px;color:#e5e5e5">' + pcur + ' ' + pxFmt(h.px) + '</div>'
+    +       '<div class="mono ' + plClass(h.day) + '" style="font-size:11.5px;margin-top:4px">' + sign(h.day) + Math.abs(h.day).toFixed(2) + '%</div>'
+    +     '</div>'
+    +   '</div>'
+    +   '<div class="hc2">'
+    +     '<div><div class="dim" style="font-size:10.5px;margin-bottom:3px">QTY · AVG</div><div class="mono" style="font-size:13px;color:#cfcfcf">' + h.qty.toLocaleString() + ' <span class="dim">· ' + pxFmt(avg) + '</span></div></div>'
+    +     '<div style="text-align:right"><div class="mono" style="font-size:15px;color:#fafafa">' + mcur + ' ' + num(h.mv) + '</div>'
+    +       '<div class="mono ' + plClass(pl) + '" style="font-size:11.5px;margin-top:3px">' + sign(pl) + num(Math.abs(pl)) + ' (' + sign(plPct) + Math.abs(plPct).toFixed(2) + '%)</div></div>'
+    +   '</div>'
+    +   '<div class="hc3">'
+    +     '<div class="row" style="gap:8px;flex:1"><div class="bar"><div class="barf" style="width:' + Math.min(alloc,100) + '%"></div></div><span class="mono dim" style="font-size:11px">' + alloc.toFixed(2) + '%</span></div>'
+    +     '<div class="row" style="gap:6px">'
+    +       '<button class="livebtn" style="' + liveStyle + '" data-act="live" data-id="' + h.id + '">' + (h.live ? "● LIVE" : "MANUAL") + '</button>'
+    +       '<button class="ibtnsm" data-act="editH" data-id="' + h.id + '">' + ICON.pencil + '</button>'
+    +       '<button class="ibtnsm" data-act="delH" data-id="' + h.id + '">' + ICON.trash + '</button>'
+    +     '</div>'
+    +   '</div>'
+    + '</div>';
+}
+
+function mainHTML(){
+  var t = totals();
+  var brokers = grouped();
+  var holdHTML = brokers.map(function(b){
+    var accts = b.accounts.map(function(g){
+      var cards = g.items.map(function(h){ return holdingCardHTML(h, t.invested); }).join("");
+      return ''
+        + '<div style="margin-bottom:18px">'
+        +   '<div class="ahdr"><span class="aname">' + esc(g.name.toUpperCase()) + '</span>'
+        +     '<span class="row mono" style="gap:9px"><span style="font-size:12px;color:#b8b8b8">' + fmt(g.mv) + '</span><span class="' + plClass(g.pl) + '" style="font-size:11px">' + sign(g.pl) + strip(g.pl) + '</span></span></div>'
+        +   cards
+        + '</div>';
+    }).join("");
+    return ''
+      + '<div style="margin-bottom:26px">'
+      +   '<div class="bhdr"><span class="bname">' + esc(b.name) + '</span>'
+      +     '<span class="row mono" style="gap:9px"><span style="font-size:13px;color:#e5e5e5">' + fmt(b.mv) + '</span><span class="' + plClass(b.pl) + '" style="font-size:11.5px">' + sign(b.pl) + strip(b.pl) + '</span></span></div>'
+      +   accts
+      + '</div>';
+  }).join("");
+
+  var cashHTML = state.cash.length === 0
+    ? '<div class="empty">No cash added. Tap <span class="up">+ Add cash</span> to include balances in net worth.</div>'
+    : state.cash.map(function(c){
+        var cur = c.cur === "USD" ? "US$" : "C$";
+        return '<div class="ccard"><div class="row" style="gap:10px"><span class="dim">' + ICON.wallet + '</span><div><div style="font-size:13.5px;color:#fafafa">' + esc(c.label) + '</div><div class="mono dim" style="font-size:11px;margin-top:2px">' + esc(c.cur) + '</div></div></div>'
+          + '<div class="row" style="gap:10px"><span class="mono" style="font-size:14.5px;color:#fafafa">' + cur + ' ' + num(c.amount) + '</span>'
+          + '<button class="ibtnsm" data-act="editC" data-id="' + c.id + '">' + ICON.pencil + '</button>'
+          + '<button class="ibtnsm" data-act="delC" data-id="' + c.id + '">' + ICON.trash + '</button></div></div>';
+      }).join("");
+
+  var refreshLabel = busy ? "Fetching live prices…" : (state.settings.interval ? ("Refresh now · auto " + state.settings.interval + "s") : "Refresh live prices now");
+
+  return ''
+    + '<div class="wrap">'
+    +   '<div class="hdr"><div><div class="title serif">Folio</div><div class="sub">' + esc(state.snapshot.toUpperCase()) + '</div></div>'
+    +     '<div class="row gap8"><button class="btn" data-act="base"><span class="mono">' + state.base + '</span>' + ICON.chev + '</button>'
+    +       '<button class="ibtn" data-act="settings">' + ICON.gear + '</button>'
+    +       '<button class="ibtn" data-act="reset">' + ICON.reset + '</button></div></div>'
+    +   '<div class="hero"><div class="lab">NET WORTH</div><div class="net serif">' + fmt(t.net) + '</div>'
+    +     '<div style="margin-top:14px"><span class="pill ' + plClass(t.pl) + '" style="background:' + (t.pl>=0?"rgba(52,211,153,.1)":"rgba(251,113,133,.1)") + '"><span class="mono">' + sign(t.pl) + strip(t.pl) + ' (' + sign(t.plPct) + Math.abs(t.plPct).toFixed(2) + '%)</span></span></div>'
+    +     '<div class="statsrow"><div class="stat"><div class="k">INVESTED</div><div class="v mono">' + fmt(t.invested) + '</div></div>'
+    +       '<div class="stat"><div class="k">CASH</div><div class="v mono">' + fmt(t.cashTotal) + '</div></div>'
+    +       '<div class="stat"><div class="k">COST BASIS</div><div class="v mono">' + fmt(t.cost) + '</div></div></div></div>'
+    +   '<div class="fxrow"><span class="dim">Exchange rate</span><button class="mono" style="background:none;border:none;color:#e5e5e5;cursor:pointer;font-size:12.5px" data-act="fx">1 USD = ' + state.fx.toFixed(3) + ' CAD <span style="opacity:.5">&#9998;</span></button></div>'
+    +   '<button class="refresh" data-act="refresh"' + (busy?" disabled":"") + '><span' + (busy?' class="spin"':'') + ' style="display:inline-flex">' + ICON.refresh + '</span>' + refreshLabel + '</button>'
+    +   (statusMsg ? '<div class="status">' + esc(statusMsg) + '</div>' : '')
+    +   '<div class="sechead"><div class="row gap8"><span class="sectitle">HOLDINGS</span><span class="count mono">' + state.holdings.length + '</span></div><button class="add" data-act="addH">' + ICON.plus + ' Add holding</button></div>'
+    +   holdHTML
+    +   '<div class="sechead" style="margin-top:28px"><div class="row gap8"><span class="dim">' + ICON.wallet + '</span><span class="sectitle">CASH</span><span class="count mono">' + state.cash.length + '</span></div><button class="add" data-act="addC">' + ICON.plus + ' Add cash</button></div>'
+    +   cashHTML
+    +   '<div class="foot">Live quotes via Finnhub (US listings, free tier).<br>TSX &amp; OTC names update manually.</div>'
+    + '</div>';
+}
+
+function render(){ document.getElementById("root").innerHTML = mainHTML(); }
+
+/* ---------- icons ---------- */
+var ICON = {
+  refresh:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>',
+  plus:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  x:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  pencil:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+  trash:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  gear:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>',
+  reset:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>',
+  wallet:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1 0-4h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>',
+  chev:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
+};
+
+/* ---------- modals ---------- */
+function closeModal(){ document.getElementById("modal").innerHTML = ""; }
+function optionList(values, current){
+  var out = values.slice();
+  if (current && current !== "Unassigned" && out.indexOf(current) === -1) out.push(current);
+  return out.map(function(v){ return '<option' + (v === current ? ' selected' : '') + '>' + esc(v) + '</option>'; }).join("");
+}
+function sheet(title, body){
+  return '<div class="mbg" id="mbg"><div class="sheet"><div class="shead"><span class="stitle">' + esc(title) + '</span><button class="ibtnsm" id="mclose">' + ICON.x + '</button></div>' + body + '</div></div>';
+}
+function val(id){ var e = document.getElementById(id); return e ? e.value : ""; }
+function checked(id){ var e = document.getElementById(id); return e ? e.checked : false; }
+
+function openHolding(h){
+  h = h || {};
+  var isEdit = !!h.id;
+  var live = h.live !== undefined ? h.live : true;
+  var body = ''
+    + '<p class="note" style="margin:-4px 0 16px">Currency is the one next to Market Value. Total cost = your book value (Market Value minus the gain/loss shown).</p>'
+    + '<div class="grid">'
+    +   '<div class="field"><div class="k">TICKER</div><input class="inp" id="f_ticker" value="' + esc(h.ticker||"") + '" placeholder="AAPL"></div>'
+    +   '<div class="field"><div class="k">REGION</div><select class="inp" id="f_region"><option' + (h.region==="US"||!h.region?" selected":"") + '>US</option><option' + (h.region==="CA"?" selected":"") + '>CA</option></select></div>'
+    +   '<div class="field full"><div class="k">NAME</div><input class="inp" id="f_name" value="' + esc(h.name||"") + '" placeholder="Apple Inc"></div>'
+    +   '<div class="field"><div class="k">BROKER</div><select class="inp" id="f_broker"><option' + (!h.broker||h.broker==="Unassigned"?" selected":"") + '>Unassigned</option>' + optionList(BROKERS, h.broker) + '</select></div>'
+    +   '<div class="field"><div class="k">ACCOUNT TYPE</div><select class="inp" id="f_account"><option' + (!h.account||h.account==="Unassigned"?" selected":"") + '>Unassigned</option>' + optionList(ACCOUNTS, h.account) + '</select></div>'
+    +   '<div class="field"><div class="k">QUANTITY</div><input class="inp" id="f_qty" type="number" value="' + (h.qty!==undefined?h.qty:"") + '" placeholder="100"></div>'
+    +   '<div class="field"><div class="k">MV CURRENCY</div><select class="inp" id="f_cur"><option' + (h.cur!=="USD"?" selected":"") + '>CAD</option><option' + (h.cur==="USD"?" selected":"") + '>USD</option></select></div>'
+    +   '<div class="field"><div class="k">MARKET VALUE</div><input class="inp" id="f_mv" type="number" value="' + (h.mv!==undefined?h.mv:"") + '" placeholder="429.36"></div>'
+    +   '<div class="field"><div class="k">TOTAL COST (BOOK)</div><input class="inp" id="f_cost" type="number" value="' + (h.cost!==undefined?h.cost:"") + '" placeholder="6436.90"></div>'
+    +   '<div class="field"><div class="k">LAST PRICE</div><input class="inp" id="f_px" type="number" value="' + (h.px!==undefined?h.px:"") + '" placeholder="3.09"></div>'
+    +   '<div class="field"><div class="k">PRICE CURRENCY</div><select class="inp" id="f_pxcur"><option' + (h.pxCur!=="CAD"?" selected":"") + '>USD</option><option' + (h.pxCur==="CAD"?" selected":"") + '>CAD</option></select></div>'
+    +   '<div class="field"><div class="k">DAY CHANGE %</div><input class="inp" id="f_day" type="number" value="' + (h.day!==undefined?h.day:0) + '" placeholder="0"></div>'
+    +   '<label class="chk"><input type="checkbox" id="f_live"' + (live?" checked":"") + '><span style="font-size:12.5px;color:#cfcfcf">Live auto-update</span></label>'
+    + '</div>'
+    + '<div class="saverow"><button class="cancel" id="mcancel">Cancel</button><button class="save" id="msave">Save</button></div>';
+  document.getElementById("modal").innerHTML = sheet(isEdit ? "Edit holding" : "Add holding", body);
+  bindModalClose();
+  document.getElementById("msave").onclick = function(){
+    var rec = {
+      id: h.id || uid(),
+      ticker: (val("f_ticker") || "—").toUpperCase().trim(),
+      name: val("f_name"),
+      region: val("f_region") || "US",
+      broker: (val("f_broker") || "Unassigned"),
+      account: (val("f_account") || "Unassigned"),
+      live: checked("f_live"),
+      qty: Number(val("f_qty")) || 0,
+      cur: val("f_cur") || "CAD",
+      mv: Number(val("f_mv")) || 0,
+      cost: Number(val("f_cost")) || 0,
+      px: Number(val("f_px")) || 0,
+      pxCur: val("f_pxcur") || "USD",
+      day: Number(val("f_day")) || 0
+    };
+    if (h.id){ for (var i=0;i<state.holdings.length;i++){ if(state.holdings[i].id===h.id){ state.holdings[i]=rec; break; } } }
+    else state.holdings.push(rec);
+    save(); closeModal(); render();
+  };
+}
+
+function openCash(c){
+  c = c || {};
+  var body = ''
+    + '<div class="grid">'
+    +   '<div class="field full"><div class="k">LABEL</div><input class="inp" id="c_label" value="' + esc(c.label||"") + '" placeholder="TFSA cash / Chequing"></div>'
+    +   '<div class="field"><div class="k">AMOUNT</div><input class="inp" id="c_amt" type="number" value="' + (c.amount!==undefined?c.amount:"") + '" placeholder="1000.00"></div>'
+    +   '<div class="field"><div class="k">CURRENCY</div><select class="inp" id="c_cur"><option' + ((c.cur||state.base)!=="USD"?" selected":"") + '>CAD</option><option' + ((c.cur||state.base)==="USD"?" selected":"") + '>USD</option></select></div>'
+    + '</div>'
+    + '<div class="saverow"><button class="cancel" id="mcancel">Cancel</button><button class="save" id="msave">Save</button></div>';
+  document.getElementById("modal").innerHTML = sheet(c.id ? "Edit cash" : "Add cash", body);
+  bindModalClose();
+  document.getElementById("msave").onclick = function(){
+    var rec = { id: c.id || uid(), label: val("c_label") || "Cash", amount: Number(val("c_amt")) || 0, cur: val("c_cur") || state.base };
+    if (c.id){ for (var i=0;i<state.cash.length;i++){ if(state.cash[i].id===c.id){ state.cash[i]=rec; break; } } }
+    else state.cash.push(rec);
+    save(); closeModal(); render();
+  };
+}
+
+function openSettings(){
+  var s = state.settings;
+  var body = ''
+    + '<div class="field"><div class="k">FINNHUB API KEY</div><input class="inp" id="s_key" value="' + esc(s.apiKey||"") + '" placeholder="key from finnhub.io"></div>'
+    + '<p class="note" style="margin:7px 2px 16px">Free key at finnhub.io/register. Stored only on this device. Real-time for US listings; TSX &amp; OTC stay manual.</p>'
+    + '<div class="field"><div class="k">AUTO-REFRESH</div><select class="inp" id="s_int">'
+    +   '<option value="0"' + (s.interval===0?" selected":"") + '>Off (manual only)</option>'
+    +   '<option value="15"' + (s.interval===15?" selected":"") + '>Every 15 seconds</option>'
+    +   '<option value="30"' + (s.interval===30?" selected":"") + '>Every 30 seconds</option>'
+    +   '<option value="60"' + (s.interval===60?" selected":"") + '>Every 60 seconds</option></select></div>'
+    + '<div class="field" style="margin-top:12px"><div class="k">DATA ENDPOINT (ADVANCED — PROXY)</div><input class="inp" id="s_end" value="' + esc(s.endpoint||FINNHUB_DEFAULT) + '"></div>'
+    + '<p class="note" style="margin:7px 2px 0">Leave as default to call Finnhub directly. If your host blocks it (CORS), point this at your own proxy.</p>'
+    + '<div class="saverow"><button class="cancel" id="mcancel">Cancel</button><button class="save" id="msave">Save</button></div>';
+  document.getElementById("modal").innerHTML = sheet("Settings", body);
+  bindModalClose();
+  document.getElementById("msave").onclick = function(){
+    state.settings = { apiKey: val("s_key").trim(), interval: Number(val("s_int")) || 0, endpoint: val("s_end").trim() || FINNHUB_DEFAULT };
+    save(); closeModal(); setupPoll(); render();
+  };
+}
+
+function bindModalClose(){
+  var c1 = document.getElementById("mclose"); if (c1) c1.onclick = closeModal;
+  var c2 = document.getElementById("mcancel"); if (c2) c2.onclick = closeModal;
+  var bg = document.getElementById("mbg"); if (bg) bg.onclick = function(e){ if (e.target === bg) closeModal(); };
+}
+
+/* ---------- live fetch ---------- */
+function refreshLive(){
+  if (!state.settings.apiKey){ statusMsg = "Add your Finnhub key in Settings to enable live prices."; render(); openSettings(); return; }
+  if (busy) return;
+  busy = true; statusMsg = "Updating…"; render();
+  var rate = state.fx;
+  var base = (state.settings.endpoint || FINNHUB_DEFAULT).replace(/\/$/, "");
+  var tickers = [];
+  state.holdings.forEach(function(h){ if (h.live && tickers.indexOf(h.ticker) === -1) tickers.push(h.ticker); });
+
+  fetch(FX_URL).then(function(r){ return r.json(); }).then(function(fj){
+    if (fj && fj.rates && fj.rates.CAD) rate = fj.rates.CAD;
+  }).catch(function(){}).then(function(){
+    var results = {}; var fails = 0; var authErr = false;
+    var jobs = tickers.map(function(t){
+      return fetch(base + "/quote?symbol=" + encodeURIComponent(t) + "&token=" + encodeURIComponent(state.settings.apiKey))
+        .then(function(r){ if (r.status === 401 || r.status === 403){ authErr = true; fails++; return null; } if (!r.ok){ fails++; return null; } return r.json(); })
+        .then(function(j){ if (j && typeof j.c === "number" && j.c > 0) results[t] = { c: j.c, dp: typeof j.dp === "number" ? j.dp : 0 }; else if (j !== null) fails++; })
+        .catch(function(){ fails++; });
+    });
+    Promise.all(jobs).then(function(){
+      state.fx = rate;
+      state.holdings.forEach(function(h){
+        if (!h.live) return;
+        var q = results[h.ticker];
+        if (!q) return;
+        h.px = q.c; h.day = q.dp; h.mv = convert(q.c * h.qty, h.pxCur, h.cur, rate);
+      });
+      var now = new Date().toLocaleTimeString();
+      state.snapshot = "live · " + now;
+      var n = Object.keys(results).length;
+      if (authErr) statusMsg = "Finnhub rejected the key (401/403). Check it in Settings.";
+      else if (n === 0 && tickers.length) statusMsg = "No quotes returned — likely CORS. Set a proxy in Settings.";
+      else statusMsg = "Live · " + n + "/" + tickers.length + " updated · " + now + (fails ? (" · " + fails + " unavailable on free tier") : "");
+      busy = false; save(); render();
+    });
+  });
+}
+
+function setupPoll(){
+  if (pollId){ clearInterval(pollId); pollId = null; }
+  if (state.settings.interval && state.settings.apiKey){ pollId = setInterval(refreshLive, state.settings.interval * 1000); }
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click", function(e){
+  var t = e.target.closest ? e.target.closest("[data-act]") : null;
+  if (!t) return;
+  var act = t.getAttribute("data-act");
+  var id = t.getAttribute("data-id");
+  if (act === "base"){ state.base = state.base === "CAD" ? "USD" : "CAD"; save(); render(); }
+  else if (act === "settings"){ openSettings(); }
+  else if (act === "reset"){ if (confirm("Reset to the seeded snapshot? Clears your edits and cash (keeps your saved key).")){ var k = state.settings; state = JSON.parse(JSON.stringify(SEED)); state.settings = k; save(); render(); } }
+  else if (act === "fx"){ var v = prompt("Exchange rate — 1 USD = ? CAD", state.fx); if (v !== null && !isNaN(parseFloat(v))){ state.fx = parseFloat(v); save(); render(); } }
+  else if (act === "refresh"){ refreshLive(); }
+  else if (act === "addH"){ openHolding(null); }
+  else if (act === "addC"){ openCash(null); }
+  else if (act === "editH"){ openHolding(findH(id)); }
+  else if (act === "delH"){ state.holdings = state.holdings.filter(function(h){ return h.id !== id; }); save(); render(); }
+  else if (act === "editC"){ openCash(findC(id)); }
+  else if (act === "delC"){ state.cash = state.cash.filter(function(c){ return c.id !== id; }); save(); render(); }
+  else if (act === "live"){ var h = findH(id); if (h){ h.live = !h.live; save(); render(); } }
+});
+function findH(id){ for (var i=0;i<state.holdings.length;i++){ if (state.holdings[i].id===id) return state.holdings[i]; } return null; }
+function findC(id){ for (var i=0;i<state.cash.length;i++){ if (state.cash[i].id===id) return state.cash[i]; } return null; }
+
+/* ---------- boot ---------- */
+load();
+render();
+setupPoll();
+</script>
+</body>
+</html>
